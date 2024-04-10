@@ -1,0 +1,303 @@
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="VProfile_LAS">
+    <meta name="author" content="Kauã Pozzi">
+    <title>Kauã Pozzi | VProfile_LAS</title>
+    <!-- font icons -->
+    <link rel="stylesheet" href="assets/vendors/themify-icons/css/themify-icons.css">
+    <!-- Bootstrap + Steller main styles -->
+    <link rel="stylesheet" href="assets/css/steller.css">
+
+    <!-- Custom CSS for subtitle -->
+    <style>
+        .subtitle {
+            margin-top: 100px; /* Adjust the value to push the subtitle down */
+        }
+    </style>
+</head>
+<body data-spy="scroll" data-target=".navbar" data-offset="40" id="home">
+
+    <!-- Page navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" data-spy="affix" data-offset-top="0">
+        <div class="container">
+            <a class="navbar-brand" href="#"><img src="assets/imgs/pozziops-high-resolution-logo-transparent.png" alt=""></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+    </nav>
+    <!-- End of page navigation -->
+
+    <!-- Page Header -->
+    <header class="portfolio" id="home">
+        <div class="container text-center">
+            <h6 class="subtitle">Projects</h6>
+            <h6 class="section-title mb-4"></h6>
+            <p class="mb-5 pb-4"><title></title></p>
+        </div>
+    </header>
+    <!-- End of Page Header -->
+
+    <div class="container">
+        <h1>[VProfile] Improvement #1 - Cloud Lift and Shift</h1>
+
+        <h2>1. Project Overview:</h2>
+        <p>
+            This is an improvement on the latest version of the Vprofile project. Looking for a more flexible and reliable infrastructure and with no upfront payment (Pay as you Go), AWS seems to be the perfect solution.
+            <br><br>
+            To accomplish this, I used the “lift and shift” way to migrate the application to AWS Cloud, with fewer changes as possible.
+        </p>
+
+        <h2>2. Services Needed:</h2>
+        <ul>
+            <li> - Route 53 (for private DNS Solution)</li>
+            <li> - Certificate Manager</li>
+            <li> - S3 Bucket (to store the artifact made with Maven, and push to EC2)</li>
+            <li> - EC2 Instances (one for each on-prem services)</li>
+            <li> - Application Load Balancer</li>
+            <li> - Auto-Scaling</li>
+        </ul>
+
+                
+                <h2>3. Project Structure:</h2>
+
+                <p>
+                    <img src="assets/imgs/VProfile_LAS.png" alt="VProfile LAS" width="700" height="500">
+                </p>
+
+                <p>
+                    Using good practice, I started off by setting up the Security Groups (SGs), Certificate Manager first. Then placed the backend, which is composed by MySQL, Memcached, and RabbitMQ into an EC2 Cluster.
+                    
+                    After that, was the EC2 instance with Tomcat and then the load balancer.
+                    
+                    Below, I'll show how this was made.
+                </p>
+
+                <p>
+                    Two SGs: One for the ELB allowing all traffic, another for the Tomcat app, allowing only the ELB on port 8080.
+                </p>
+
+                <p>
+                    <img src="assets/imgs/vp01.png" alt="VProfile LAS" width="900" height="300">
+                </p>
+
+                <h2>Inbound rules to the backend security group</h2>
+                
+                <p>
+                    <img src="assets/imgs/vp02.png" alt="VProfile LAS" width="700" height="300">
+                </p>
+
+                <p>
+                    After it, the backend services: Ec2 Instances
+                </p>
+
+                <ul>
+                    <li>
+                        <strong>[Backend] db01 - Ec2 MySQL User Data</strong>
+                        <br>
+                        Installing MariaDB server
+                        <br>
+
+                        <p>
+                            <img src="assets/imgs/vp03.png" alt="VProfile LAS" width="700" height="300">
+                        </p>
+
+                        SSH into db01 instance - just to check if its ok
+                    </li>
+
+                    <p>
+                        <img src="assets/imgs/vp04.png" alt="VProfile LAS" width="1000" height="200">
+                    </p>
+
+                    <li>
+                        <strong>[Backend] mc01 - Ec2 Memcached User Data</strong>
+                        <br>
+                        CentOS 
+                        <br>
+                        User data script:
+                        <br>
+                        Installing Memcached
+                        <br>
+                        Firewall
+
+                        <p>
+                            <img src="assets/imgs/vp05.png" alt="VProfile LAS" width="500" height="300">
+                        </p>
+                    </li>
+                    <li>
+                        <strong>[Backend] rmq01 - Ec2 RabbitMQ User Data</strong>
+
+                        <p>
+                            <img src="assets/imgs/vp06.png" alt="VProfile LAS" width="600" height="300">
+                        </p>
+                    </li>
+                </ul>
+
+                <p>And then the app server:</p>
+
+                <ul>
+                    <li>
+                        <strong>[App Layer] app01 - Ec2 Tomcat9 User Data</strong>
+
+                        <p>
+                            <img src="assets/imgs/vp07.png" alt="VProfile LAS" width="800" height="200">
+                        </p>
+
+                        <p>
+                            <img src="assets/imgs/vp08.png" alt="VProfile LAS" width="800" height="300">
+                        </p>
+                    </li>
+                </ul>
+
+                <p>[App Layer] Creating the S3 Bucket via CLI</p>
+
+                <p>
+                    <img src="assets/imgs/vp09.png" alt="VProfile LAS" width="1000" height="100">
+                </p>
+
+                <p>Build Artifact with Maven</p>
+
+                <p>
+                    <img src="assets/imgs/vp10.png" alt="VProfile LAS" width="650" height="300">
+                </p>
+
+                <p>Put it on a S3 bucket and then fetch to EC2 instances</p>
+
+                <p>
+                    <img src="assets/imgs/vp11.png" alt="VProfile LAS" width="700" height="300">
+                </p>
+
+                <p>[App Layer] Application Load Balancer</p>
+
+                <p>
+                    <img src="assets/imgs/vp12.png" alt="VProfile LAS" width="800" height="300">
+                </p>
+
+                <li>
+                    <strong>Auto-Scaling Group</strong>
+                    <p>For the ASG it was necessary to create an AMI first, then setup a launch template, registering the proper roles and key pair for access. This is needed, because when the ASG notes that a new instance is going to be created, it will make it with the AMI.</p>
+
+                    <strong>Creating Security Groups</strong> 
+                    <p>The main objective here is to set up configuration rules, so the services are correctly pointed to one another, and every port is in the right place. For this were created 3 security groups: one for the load balancer, one for the application instance (tomcat) allowing the ELB, and another for the backend instances (rabbitmq, memcached, mysql) allowing access from the app ELB, and from the services within its own security group.</p>
+                </li>
+
+                <p>SSH access were created on both app and backend, on port 22.</p>
+
+                <strong>Hosted zones with Route 53 (Private IP)</strong>
+
+                <p>
+                    <img src="assets/imgs/vp13.png" alt="VProfile LAS" width="500" height="300">
+                </p>
+
+                <p>ELB Configuration HTTPS (Port 443)</p>
+
+                <p>
+                    <img src="assets/imgs/vp19.png" alt="VProfile LAS" width="800" height="100">
+                </p>
+                
+                <p>Checking if DNS Name works</p> 
+
+                <p>
+                    <img src="assets/imgs/vp14.png" alt="VProfile LAS" width="600" height="300">
+                </p>
+                
+                <p>Load Balancer and AUTO SCALING Configuration <br> AMI </p>
+
+                <p>
+                    <img src="assets/imgs/vp15.png" alt="VProfile LAS" width="800" height="200">
+                </p>
+
+                <p>Launch Template </p>
+
+                <p>
+                    <img src="assets/imgs/vp16.png" alt="VProfile LAS" width="800" height="200">
+                </p>
+                
+                <p>Scaling Group</p>
+                
+                <p>
+                    <img src="assets/imgs/vp17.png" alt="VProfile LAS" width="800" height="200">
+                </p>
+
+                <!-- Insert detailed steps and images here if necessary -->
+                
+                <h2>4. Dependencies:</h2>
+                <p>
+                    The applications dependencies were all received from the developers from this repository: <br>
+                    <a href="https://github.com/hkhcoder/vprofile-project">https://github.com/hkhcoder/vprofile-project</a>
+                </p>
+                
+                <h2>5. Testing:</h2>
+                <p>
+                    After everything set up, I used my own domain, with the Certificate Manager to access the application through the public internet (http: 80 / https: 443).
+                    The application was programmed for this particular project, so we could test the Memcached and MySQL, to check if it runs properly.
+                </p>
+
+                <p>
+                    <img src="assets/imgs/vp18.png" alt="VProfile LAS" width="800" height="300">
+                </p>
+                
+                <!-- Insert testing results and screenshots here if necessary -->
+                
+                <h2>6. Troubleshooting:</h2>
+                <p>
+                    One of the mistakes I've been through this project was the domain, CNAME configuration, as Registro.br is not properly designed to make this particular kind of execution. I had to make some mistakes, and tests, until I could access the app through the domain.
+                </p>
+                
+        </div>
+    </header>
+    <!-- End of Page Header -->
+
+    <!-- Hire me section -->
+    <section class="bg-gray p-0 section">
+        <div class="container">
+            <div class="card bg-primary">
+                <div class="card-body text-light">
+                    <div class="row align-items-center">
+                        <div class="col-sm-9 text-center text-sm-left">
+                            <h5 class="mt-3">Hire Me For Your Project</h5>
+                            <p class="mb-3">I would love to know how i can help.</p>
+                        </div>
+                        <div class="col-sm-3 text-center text-sm-right">
+                            <a href="https://wa.me/5541999084646" target="_blank" class="btn btn-light rounded">Hire Me!</a>
+                        </div>
+                    </div>
+                </div> 
+            </div>
+        </div>
+    </section>      
+    <!-- End od Hire me section. -->
+
+    <!-- Page Footer -->
+    <footer class="page-footer">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-sm-6">
+                    <p>Copyright <script>document.write(new Date().getFullYear())</script> &copy; <a href="http://www.devcrud.com" target="_blank">DevCRUD</a></p>
+                </div>
+                <div class="col-sm-6">
+                    <div class="socials">
+                        <a class="social-item" href="https://www.facebook.com/pozzi81"><i class="ti-facebook"></i></a>
+                        <a class="social-item" href="https://www.linkedin.com/in/kauapozzi/"><i class="ti-linkedin"></i></a>
+                        <a class="social-item" href="https://github.com/KaPozzi"><i class="ti-github"></i></a>
+                        <a class="social-item" href="https://twitter.com/PozziKaua"><i class="ti-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer> 
+    <!-- End of page footer -->
+	
+	<!-- core  -->
+    <script src="assets/vendors/jquery/jquery-3.4.1.js"></script>
+    <script src="assets/vendors/bootstrap/bootstrap.bundle.js"></script>
+    <!-- bootstrap 3 affix -->
+	<script src="assets/vendors/bootstrap/bootstrap.affix.js"></script>
+
+    <!-- steller js -->
+    <script src="assets/js/steller.js"></script>
+
+</body>
+</html>
