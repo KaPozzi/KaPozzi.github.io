@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="VProfile_base">
     <meta name="author" content="Kauã Pozzi">
-    <title>Kauã Pozzi | VProfile_base</title>
+    <title>Kauã Pozzi | VProfile_Re-estructure</title>
     <!-- font icons -->
     <link rel="stylesheet" href="assets/vendors/themify-icons/css/themify-icons.css">
     <!-- Bootstrap + Steller main styles -->
@@ -58,86 +58,157 @@
             </head>
             <body>
             
-            <h1>[Vprofile] On premises Web-application</h1>
+            <h1>[VProfile - Cloud] Improvement #2 - Re-architect Services on AWS for better performance.</h1>
             
-            <h2>README File</h2>
-            
-            <h3>1. Project Overview:</h3>
-            <p>
-                For this project, I wanted to build a multi-tier web application, by deploying each service in a single VM, resulting in decoupled applications. This is good because if a service goes down, the other ones aren’t affected.
-                <br><br>
-                For deployment, I used vagrant for automating the process using Infrastructure as Code (IAC), which makes it faster, more reliable, repeatable, and easier to debug also.
+            <h2>1. Project Overview:</h2>
+            <p>Vprofile project now is running on AWS but its not configured in the best way possible. Before, the application was running basically on Ec2 instances with the services running in them. Now, we are going to run the application on AWS services like RDS, using Beanstalk to IAAC and make it easier to automate the process.<br>
+                The objective is to minimize operational overhead, operate more efficiently and with better performance using AWS native services. Finally, avoiding upfront payment is still also a positive aspect about using the Cloud.<br>
+                Using PAAS and SAAS             
             </p>
             
-            <h3>2. Services Used:</h3>
+            <h2>2. Services Used:</h2>
             <ul>
-                <li> - NGINX (load balancer)</li>
-                <li> - Apache Tomcat (Application)</li>
-                <li> - RabbitMQ (messaging)</li>
-                <li> - Memcached (cache)</li>
-                <li> - MariaDB (database)</li>
+                <li> - Elastic Beanstalk (Deploy VM Tomcat9)</li>
+                <li> - Elastic Cache (Memcached)</li>
+                <li> - ActiveMQ (RabbitMQ)</li>
+                <li> - Cloudfront (Content Delivery Network)</li>
+                <li> - S3</li>
+                <li> - Application Load Balancer (ALB)</li>
+                <li> - Auto-Scaling Group (ASG)</li>
+                <li> - RDS</li>
+                <li> - Route 53 (for DNS)</li>
             </ul>
-            
-            <h3>3. Usage Guidelines:</h3>
-            <ul>
-                <li>Instructions on how to run or deploy the project.</li>
-                <li>Explanation of any command-line interfaces or parameters.</li>
-                <li>Examples of common usage scenarios.</li>
-            </ul>
-            
-            <h3>4. Project Structure:</h3>
+                    
+            <h2>4. Project Structure:</h2>
 
             <p>
-                <img src="assets/imgs/VProfile_base.png" alt="VProfile base" width="800" height="500    ">
+                <img src="assets/imgs/VProfile_Re-estructure.png" alt="VProfile base" width="800" height="400    ">
             </p>
 
             <ul>
-                <li>Overview of the project directory structure.</li>
-                <li>Explanation of the purpose of each directory or important files.</li>
+                <li>Create a Key pair.</li>
+                <li>Create Security Group for Backend Services.</li>
             </ul>
-            
-            <h3>5. Dependencies:</h3>
+
             <p>
-                The applications dependencies were all received from the developers from this repository: <br>
-                <a href="https://github.com/hkhcoder/vprofile-project">https://github.com/hkhcoder/vprofile-project</a>
+                <img src="assets/imgs/rs001.png" alt="VProfile base" width="800" height="200">
             </p>
             
-            <h3>6. Configuration:</h3>
+            <p>Defining Inboud Rules (SSH and It’s own Security Group, so the services are allowed between each other)</p>
+
+            <p>
+                <img src="assets/imgs/rs002.png" alt="VProfile base" width="800" height="200">
+            </p>
+            
+            <p>RDS <br> Subnet Group</p>
+            
+            <p>
+                <img src="assets/imgs/rs003.png" alt="VProfile base" width="800" height="350    ">
+            </p>
+
+            <p>
+                <img src="assets/imgs/rs004.png" alt="VProfile base" width="500" height="400">
+            </p>
+            
+            <p>Creating Parameter group</p>
+
+            <p>
+                <img src="assets/imgs/rs005.png" alt="VProfile base" width="800" height="200">
+            </p>
+
+            <p>"Creating RDS Instance (MySQL 8.0)"</p>
+
+            <p>
+                <img src="assets/imgs/rs006.png" alt="VProfile base" width="800" height="500    ">
+            </p>
+
+            <p>"Creating ElastiCache (Memcached)"</p>
+
+            <p>
+                <img src="assets/imgs/rs007.png" alt="VProfile base" width="800" height="200    ">
+            </p>
+
+            <p>"Creating Amazon MQ (Before: RabbitMQ)"</p>
+
+            <p>
+                <img src="assets/imgs/rs008.png" alt="VProfile base" width="800" height="400    ">
+            </p>
+
+            <p>Allow Inbound rules to backend, from Ec2 instances. For this, i took the instance id from Ec2 and allowed on port 3306.</p>
+
+            <p>
+                <img src="assets/imgs/rs009.png" alt="VProfile base" width="800" height="300    ">
+            </p>
+
+            <p>Fetch the database data, into MySQL from an Ec2 Instance</p>
+
+            <p>
+                <img src="assets/imgs/rs010.png" alt="VProfile base" width="800" height="500    ">
+            </p>
+
+            <p>Launching Elastic Beanstalk</p>
+
+            <p>
+                <img src="assets/imgs/rs011.png" alt="VProfile base" width="800" height="450    ">
+            </p>
+
+            <p>Enabled ACL, updated the security groups for the backend. so the instance from Beanstalk and the backend can be connected.<br>
+            Then changed the app url endpoints, and filling username and password so the services can connect to the app.</p>
+
+            <p>
+                <img src="assets/imgs/rs012.png" alt="VProfile base" width="800" height="500    ">
+            </p>
+
+            <p>Building Maven Artifact</p>
+
+            <p>
+                <img src="assets/imgs/rs013.png" alt="VProfile base" width="800" height="400    ">
+            </p>
+
+             <p>Upload and Deploy the artifact in Beanstalk</p>
+
+            <p>
+                <img src="assets/imgs/rs014.png" alt="VProfile base" width="800" height="450    ">
+            </p>
+
+             <p>Configured DNS with CNAME and SSL certificate</p>
+
+             <p>
+                <img src="assets/imgs/rs015.png" alt="VProfile base" width="800" height="250    ">
+            </p>
+            
+            <h2>5. Testing:</h2>
             <ul>
-                <li>Details on any configuration files and their purpose.</li>
-                <li>How to customize configuration settings for different environments.</li>
+                <li>Now the website is fully functioning, here are the tests!</li>
+                <li>This is the Main page. Once it’s showing everything, like images, it means RDS (database) is working properly.</li>
+
+                <p>This is the Main page. Once it’s showing everything, like images, it means RDS (database) is working properly
+
+                <p>
+                <img src="assets/imgs/rs016.png" alt="VProfile base" width="800" height="400">
+                </p>
+                
+                <p>Amazon MQ is working fine as shown below</p>
+
+                <p>
+                <img src="assets/imgs/rs017.png" alt="VProfile base" width="800" height="300">
+                </p>
+
+                <p>Setup Cloudfront</p>
+
+                <p>
+                <img src="assets/imgs/rs018.png" alt="VProfile base" width="800" height="200    ">
+                </p>
+
+                <p>This project was a great way to understand how some services in AWS are connected to each other, how<br>
+                to configure and deploy Beanstalk to make Cloudfront work, as this is a very used service in AWS. </p>
+
+                <p>Any feedback will be welcome.</p>
+
+                <p>Kauã Pozzi</p>
+
             </ul>
             
-            <h3>7. Testing:</h3>
-            <ul>
-                <li>How to run tests and ensure code quality.</li>
-                <li>Information on test coverage and test environments.</li>
-            </ul>
-            
-            <h3>8. Deployment:</h3>
-            <ul>
-                <li>Instructions for deploying the project to production or staging environments.</li>
-                <li>Any special considerations or best practices for deployment.</li>
-            </ul>
-            
-            <h3>9. Troubleshooting:</h3>
-            <ul>
-                <li>Common issues and their solutions.</li>
-                <li>How to get help or support (e.g., links to documentation, community forums).</li>
-            </ul>
-            
-            <h3>10. License:</h3>
-            <ul>
-                <li>Details about the project's license (e.g., MIT, Apache 2.0).</li>
-                <li>Any restrictions or permissions associated with the license.</li>
-            </ul>
-            
-            <h3>11. Contact Information:</h3>
-            <ul>
-                <li>GitHub Repo: <a href="https://github.com/hkhcoder/vprofile-project">https://github.com/hkhcoder/vprofile-project</a></li>
-                <li>How to reach out to the project maintainers or contributors (e.g., email addresses, Slack channels).</li>
-                <li>Links to project documentation or support resources.</li>
-            </ul>
             </p>
         </div>
     </header>
