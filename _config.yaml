@@ -1,3 +1,42 @@
-title: Kauã Pozzi
-description: Sharing my Journey
+title: "Kauã Pozzi"
+description: "Sharing my Journey"
 theme: minima
+
+# ✅ Website URL (Update if you have a custom domain)
+# url: "https://yourwebsite.com"
+# baseurl: ""  # Keep empty if the site is in the root domain
+
+# ✅ Blog Settings
+# permalink: /blog/:title/  # Creates clean URLs (e.g., /blog/my-homelab/)
+timezone: America/Sao_Paulo  # Adjust to your timezone
+# future: false  # Hide future-dated posts until the date arrives
+
+# ✅ Navigation Links (If you use a menu)
+### nav:
+#  - title: Home
+#    url: "/"
+#  - title: Blog
+#    url: "/blog/"
+#  - title: Projects
+#    url: "/projects/"
+
+# ✅ SEO & Social Sharing
+author: "Kauã Pozzi"
+twitter_username: "PozziKaua"  # Remove if not using Twitter
+github_username: "KaPozzi"
+email: "kapozzi@gmail.com"
+
+# ✅ Plugins (Enable extra features)
+plugins:
+  - jekyll-feed    # Adds an RSS feed
+  - jekyll-seo-tag # Helps with SEO
+  - jekyll-sitemap # Generates a sitemap for search engines
+
+# ✅ Blog Appearance (For Minima theme)
+minima:
+  skin: auto  # Light/Dark mode based on system settings
+  social_links:
+    twitter: https://x.com/PozziKaua
+    github: https://github.com/KaPozzi
+    linkedin: https://www.linkedin.com/in/kauapozzi/
+  show_excerpts: true  # Shows a preview of each blog post
