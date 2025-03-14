@@ -2,11 +2,60 @@
 layout: default
 title: Blog
 ---
-<h1>Blog Posts</h1>
-<ul>
-  {% for post in site.posts %}
-    <li>
-      <a href="{{ post.url }}">{{ post.title }}</a> - {{ post.date | date: "%B %d, %Y" }}
-    </li>
-  {% endfor %}
-</ul>
+
+<style>
+  .blog-container {
+    max-width: 700px;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+  }
+
+  h1 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 20px;
+  }
+
+  .blog-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .blog-list li {
+    background: #f8f8f8;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    transition: 0.3s;
+  }
+
+  .blog-list li:hover {
+    background: #e8e8e8;
+  }
+
+  .blog-list a {
+    text-decoration: none;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+  }
+
+  .blog-list .date {
+    display: block;
+    font-size: 0.9rem;
+    color: #666;
+    margin-top: 5px;
+  }
+</style>
+
+<div class="blog-container">
+  <h1>📖 My Blog</h1>
+  <ul class="blog-list">
+    {% for post in site.posts %}
+      <li>
+        <a href="{{ post.url }}">{{ post.title }}</a>
+        <span class="date">{{ post.date | date: "%B %d, %Y" }}</span>
+      </li>
+    {% endfor %}
+  </ul>
+</div>
